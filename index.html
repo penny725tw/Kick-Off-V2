@@ -1,151 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invitation Generator - Emers Kick Off 2026</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        /* --- UI STYLING (Control Panel) --- */
-        body { 
-            font-family: "Segoe UI", sans-serif; 
-            background: #f4f6f9; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 20px; 
-            color: #333;
-        }
-        .controls { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            width: 100%; 
-            max-width: 800px; 
-            margin-bottom: 30px; 
-            border-top: 5px solid #d9534f; 
-        }
-        .controls h2 { margin-top: 0; color: #d9534f; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
-        
-        .form-group { margin-bottom: 15px; }
-        label { font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        input:focus { border-color: #d9534f; outline: none; }
-
-        button { 
-            background-color: #d9534f; 
-            color: white; 
-            padding: 15px; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-size: 18px; 
-            font-weight: bold; 
-            width: 100%; 
-            margin-top: 10px; 
-            transition: 0.3s; 
-        }
-        button:hover { background-color: #c9302c; }
-
-        /* --- LETTER STYLING (A4 Paper) --- */
-        #letter-preview {
-            background: white;
-            width: 210mm; 
-            height: 296mm; /* FIX: Use fixed height, slightly less than 297 to prevent overflow blank page */
-            padding: 20mm 25mm; 
-            box-shadow: 0 0 20px rgba(0,0,0,0.15);
-            font-family: "Times New Roman", serif; 
-            color: #000;
-            font-size: 12pt;
-            line-height: 1.4;
-            position: relative; /* Crucial for absolute footer */
-            box-sizing: border-box;
-        }
-        
-        /* FIX: Remove flexbox logic causing issues */
-        .letter-content { 
-            width: 100%;
-        }
-        
-        .header { 
-            text-align: center; 
-            margin-bottom: 40px; 
-        }
-        .header-title { font-size: 16pt; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; }
-        .header-company { font-weight: bold; font-size: 13pt; }
-        .header-address { font-size: 10pt; color: #444; margin-top: 5px;}
-
-        .body-text { margin-bottom: 15px; text-align: justify; }
-        .details-section { margin-left: 20px; margin-top: 20px; margin-bottom: 20px; line-height: 1.8; }
-        .label-text { font-weight: bold; display: inline-block; width: 160px; }
-
-        .sign-off { margin-top: 40px; }
-        .signature-space { height: 60px; }
-        
-        /* FIX: Absolute Positioning for Footer */
-        .footer {
-            position: absolute;
-            bottom: 20mm; /* Pin to bottom margin */
-            left: 0;
-            width: 100%;
-            text-align: center;
-            font-size: 9pt;
-            color: #666;
-            padding-top: 10px;
-        }
-        /* Add a line above footer visually */
-        .footer::before {
-            content: "";
-            display: block;
-            width: 80%; /* Width of the line */
-            margin: 0 auto 10px auto;
-            border-top: 1px solid #ccc;
-        }
-
-        .var { color: #d9534f; font-weight: bold; }
-    </style>
-</head>
-<body>
-
-    <div class="controls">
-        <h2>✉️ Invitation Generator (Fixed PDF Layout)</h2>
-        <div style="margin-bottom: 15px; color: #666; font-size: 0.9em;">
-            Enter the visitor's details below. The PDF layout is now locked to A4.
-        </div>
-        
-        <div class="form-group">
-            <label>Title (Gender):</label>
-            <select id="inGender" onchange="update()">
-                <option value="Mr.">Mr.</option>
-                <option value="Ms.">Ms.</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Full Name:</label>
-            <input type="text" id="inName" placeholder="e.g. John Doe" oninput="update()">
-        </div>
-
-        <div class="form-group">
-            <label>Passport Number:</label>
-            <input type="text" id="inPassport" oninput="update()">
-        </div>
-
-        <div class="form-group">
-            <label>Passport Issue Date:</label>
-            <input type="date" id="inIssueDate" onchange="update()">
-        </div>
-
-        <div class="form-group">
-            <label>Passport Issue Place:</label>
-            <input type="text" id="inIssuePlace" placeholder="e.g. USA" oninput="update()">
-        </div>
-
-        <button onclick="generatePDF()">📥 Download Invitation PDF</button>
-    </div>
-
-    <div id="letter-preview">
+<div id="letter-preview">
         <div class="letter-content">
+            
             <div class="header">
-                <div class
+                <div class="header-title">Invitation Letter</div>
+                <div class="header-company">Emers Vietnam Co., Ltd</div>
+                <div class="header-address">
+                    906, 9F Mapletree Business Centre, 1060 Nguyen Van Linh Street,<br>
+                    Tan Phong Ward, Dist 7, HCM
+                </div>
+            </div>
+
+            <div class="body-text" style="margin-bottom: 20px;">
+                To whom it may concern:
+            </div>
+
+            <div class="body-text">
+                On behalf of Emers Vietnam Co., Ltd., we would like to invite to attend the business meeting at our Ho Chi Minh City office.
+            </div>
+
+            <div class="body-text">
+                <strong>Purpose of the visit:</strong> Reference to the 2026 Kick Off Meeting EMERS.
+            </div>
+
+            <div class="body-text" style="margin-top: 20px; font-weight: bold; text-decoration: underline;">
+                Personnel Details:
+            </div>
+
+            <div class="details-section">
+                <div><span class="label-text">Full name:</span> <span id="outGender" class="var">Mr.</span> <span id="outName" class="var">[Full Name]</span></div>
+                <div><span class="label-text">Passport number:</span> <span id="outPassport" class="var">...</span></div>
+                <div><span class="label-text">Passport issue date:</span> <span id="outIssueDate" class="var">...</span></div>
+                <div><span class="label-text">Passport issue place:</span> <span id="outIssuePlace" class="var">...</span></div>
+            </div>
+
+            <div class="body-text">
+                The event/meeting will be conducted from <strong>24/12/2025 - 28/12/2025</strong>.
+            </div>
+
+            <div class="body-text">
+                We appreciate your interest and support to attend the event at Emers Vietnam.
+            </div>
+
+            <div class="sign-off">
+                <div>Best regards,</div>
+                <br>
+                <div>On behalf of Emers Vietnam Co., Ltd.</div>
+                
+                <div class="signature-space"></div> <div style="font-weight: bold;">Yu Yuan Kai</div>
+                <div>Vice President</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div style="font-weight: bold;">Emers Vietnam Co., Ltd</div>
+            <div>906, 9F Mapletree Business Centre</div>
+            <div>1060 Nguyen Van Linh Street, Tan Phong Ward, Dist 7, HCM</div>
+        </div>
+    </div>
+    ```
+
+---
+
+### 💡 3 個修改小撇步 (Cheat Sheet)
+
+1.  **換行**：
+    在 HTML 裡按 Enter 鍵是不會換行的。如果您需要換行，請插入代碼：
+    ` <br> `
+
+2.  **加粗文字**：
+    如果您想要強調某個日期或名字，請用這個包起來：
+    ` <strong>我要加粗的文字</strong> `
+
+3.  **千萬小心 `id="..."`**：
+    在 **[區域 6]** 中，您會看到像 `<span id="outName">` 這樣的標籤。
+    * ✅ **可以改**：它前面的標籤文字，例如 `Full name:` 改成 `Name:`。
+    * ❌ **不能改**：`id="outName"` 絕對不能動，否則輸入框打字後，這裡不會有反應。
