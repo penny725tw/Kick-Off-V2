@@ -55,4 +55,203 @@
         .header-address { font-size: 10pt; color: #444; margin-top: 5px;}
 
         .body-text { margin-bottom: 15px; text-align: justify; }
-        .details-section {
+        .details-section { margin-left: 20px; margin-top: 20px; margin-bottom: 20px; line-height: 1.8; }
+        .label-text { font-weight: bold; display: inline-block; width: 160px; }
+
+        .sign-off { margin-top: 40px; }
+        .signature-space { height: 60px; }
+        
+        .footer {
+            position: absolute;
+            bottom: 20mm;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 9pt;
+            color: #666;
+            padding-top: 10px;
+        }
+        .footer::before {
+            content: ""; display: block; width: 80%; margin: 0 auto 10px auto; border-top: 1px solid #ccc;
+        }
+
+        .var { color: #d9534f; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <h2>✉️ Invitation Generator (With Company Name)</h2>
+        <div style="margin-bottom: 15px; color: #666; font-size: 0.9em;">
+            Enter visitor details. Company Name added.
+        </div>
+        
+        <div class="form-group">
+            <label>Title (Gender):</label>
+            <select id="inGender" onchange="update()">
+                <option value="Mr.">Mr.</option>
+                <option value="Ms.">Ms.</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Full Name:</label>
+            <input type="text" id="inName" placeholder="e.g. John Doe" oninput="update()">
+        </div>
+
+        <div class="form-group">
+            <label>Company Name:</label>
+            <input type="text" id="inCompany" placeholder="e.g. ABC Corp" oninput="update()">
+        </div>
+
+        <div class="form-group">
+            <label>Passport Number:</label>
+            <input type="text" id="inPassport" oninput="update()">
+        </div>
+
+        <div class="form-group">
+            <label>Passport Issue Date:</label>
+            <input type="date" id="inIssueDate" onchange="update()">
+        </div>
+
+        <div class="form-group">
+            <label>Passport Issue Place:</label>
+            <input type="text" id="inIssuePlace" placeholder="e.g. USA" oninput="update()">
+        </div>
+
+        <button id="genBtn" onclick="generatePDF()">📥 Download Invitation PDF</button>
+    </div>
+
+    <div id="letter-preview">
+        <div class="letter-content">
+            <div class="header">
+                <div class="header-title">Invitation Letter</div>
+                <div class="header-company">Emers Vietnam Co., Ltd</div>
+                <div class="header-address">
+                    906, 9F Mapletree Business Centre, 1060 Nguyen Van Linh Street,<br>
+                    Tan Phong Ward, Dist 7, HCM
+                </div>
+            </div>
+
+            <div class="body-text" style="margin-bottom: 20px;">
+                To whom it may concern:
+            </div>
+
+            <div class="body-text">
+                On behalf of Emers Vietnam Co., Ltd., we would like to invite the personnel whose details are listed below to attend a business meeting at our Ho Chi Minh City office.
+            </div>
+
+            <div class="body-text">
+                <strong>Purpose of the visit:</strong> Reference to the 2026 Kick Off Meeting.
+            </div>
+
+            <div class="body-text" style="margin-top: 20px; font-weight: bold; text-decoration: underline;">
+                Personnel Details:
+            </div>
+
+            <div class="details-section">
+                <div><span class="label-text">Full name:</span> <span id="outGender" class="var">Mr.</span> <span id="outName" class="var">[Full Name]</span></div>
+                <div><span class="label-text">Company Name:</span> <span id="outCompany" class="var">...</span></div>
+                <div><span class="label-text">Passport number:</span> <span id="outPassport" class="var">...</span></div>
+                <div><span class="label-text">Passport issue date:</span> <span id="outIssueDate" class="var">...</span></div>
+                <div><span class="label-text">Passport issue place:</span> <span id="outIssuePlace" class="var">...</span></div>
+            </div>
+
+            <div class="body-text">
+                The event/meeting will be conducted from <strong>24/12/2025 - 28/12/2025</strong>.
+            </div>
+
+            <div class="body-text">
+                We appreciate your interest and support to attend the event at Emers Vietnam.
+            </div>
+
+            <div class="sign-off">
+                <div>Best regards,</div>
+                <br>
+                <div>On behalf of Emers Vietnam Co., Ltd.</div>
+                
+                <div class="signature-space"></div> 
+                
+                <div style="font-weight: bold;">Yu Yuan Kai</div>
+                <div>Vice President</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div style="font-weight: bold;">Emers Vietnam Co., Ltd</div>
+            <div>906, 9F Mapletree Business Centre</div>
+            <div>1060 Nguyen Van Linh Street, Tan Phong Ward, Dist 7, HCM</div>
+        </div>
+    </div>
+
+    <script>
+        function update() {
+            const gender = document.getElementById('inGender').value;
+            const name = document.getElementById('inName').value;
+            const company = document.getElementById('inCompany').value; // Get Company
+            const passport = document.getElementById('inPassport').value;
+            const issuePlace = document.getElementById('inIssuePlace').value;
+            const dateVal = document.getElementById('inIssueDate').value;
+            
+            let dateFormatted = "...";
+            if (dateVal) {
+                const d = new Date(dateVal);
+                dateFormatted = d.getDate().toString().padStart(2,'0') + '/' + (d.getMonth()+1).toString().padStart(2,'0') + '/' + d.getFullYear();
+            }
+
+            document.getElementById('outGender').innerText = gender;
+            document.getElementById('outName').innerText = name || "[Full Name]";
+            document.getElementById('outCompany').innerText = company || "..."; // Update Company
+            document.getElementById('outPassport').innerText = passport || "...";
+            document.getElementById('outIssueDate').innerText = dateFormatted;
+            document.getElementById('outIssuePlace').innerText = issuePlace || "...";
+        }
+
+        function generatePDF() {
+            if (typeof html2pdf === 'undefined') {
+                alert("錯誤：PDF 生成工具尚未載入完畢，請檢查網路連線或稍後再試。");
+                return;
+            }
+
+            const btn = document.getElementById('genBtn');
+            const originalText = btn.innerText;
+            btn.innerText = "⏳ Generating PDF...";
+            btn.disabled = true;
+
+            try {
+                const vars = document.querySelectorAll('.var');
+                vars.forEach(v => v.style.color = 'black');
+
+                const element = document.getElementById('letter-preview');
+                const name = document.getElementById('inName').value || 'Guest';
+                const filename = 'Invitation_Letter_' + name.replace(/\s+/g, '_') + '.pdf';
+
+                const opt = {
+                    margin:       0, 
+                    filename:     filename,
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2, scrollY: 0 }, 
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+
+                html2pdf().set(opt).from(element).save().then(() => {
+                    vars.forEach(v => v.style.color = '#d9534f');
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }).catch(err => {
+                    alert("PDF 生成失敗 (Library Error): " + err.message);
+                    vars.forEach(v => v.style.color = '#d9534f');
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
+            } catch (error) {
+                alert("發生未知錯誤: " + error.message);
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+        
+        update();
+    </script>
+</body>
+</html>
