@@ -29,3 +29,123 @@
         .controls h2 { margin-top: 0; color: #d9534f; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
         
         .form-group { margin-bottom: 15px; }
+        label { font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        input:focus { border-color: #d9534f; outline: none; }
+
+        button { 
+            background-color: #d9534f; 
+            color: white; 
+            padding: 15px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 18px; 
+            font-weight: bold; 
+            width: 100%; 
+            margin-top: 10px; 
+            transition: 0.3s; 
+        }
+        button:hover { background-color: #c9302c; }
+
+        /* --- LETTER STYLING (A4 Paper) --- */
+        #letter-preview {
+            background: white;
+            width: 210mm; 
+            height: 296mm; /* FIX: Use fixed height, slightly less than 297 to prevent overflow blank page */
+            padding: 20mm 25mm; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+            font-family: "Times New Roman", serif; 
+            color: #000;
+            font-size: 12pt;
+            line-height: 1.4;
+            position: relative; /* Crucial for absolute footer */
+            box-sizing: border-box;
+        }
+        
+        /* FIX: Remove flexbox logic causing issues */
+        .letter-content { 
+            width: 100%;
+        }
+        
+        .header { 
+            text-align: center; 
+            margin-bottom: 40px; 
+        }
+        .header-title { font-size: 16pt; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; }
+        .header-company { font-weight: bold; font-size: 13pt; }
+        .header-address { font-size: 10pt; color: #444; margin-top: 5px;}
+
+        .body-text { margin-bottom: 15px; text-align: justify; }
+        .details-section { margin-left: 20px; margin-top: 20px; margin-bottom: 20px; line-height: 1.8; }
+        .label-text { font-weight: bold; display: inline-block; width: 160px; }
+
+        .sign-off { margin-top: 40px; }
+        .signature-space { height: 60px; }
+        
+        /* FIX: Absolute Positioning for Footer */
+        .footer {
+            position: absolute;
+            bottom: 20mm; /* Pin to bottom margin */
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 9pt;
+            color: #666;
+            padding-top: 10px;
+        }
+        /* Add a line above footer visually */
+        .footer::before {
+            content: "";
+            display: block;
+            width: 80%; /* Width of the line */
+            margin: 0 auto 10px auto;
+            border-top: 1px solid #ccc;
+        }
+
+        .var { color: #d9534f; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <h2>✉️ Invitation Generator (Fixed PDF Layout)</h2>
+        <div style="margin-bottom: 15px; color: #666; font-size: 0.9em;">
+            Enter the visitor's details below. The PDF layout is now locked to A4.
+        </div>
+        
+        <div class="form-group">
+            <label>Title (Gender):</label>
+            <select id="inGender" onchange="update()">
+                <option value="Mr.">Mr.</option>
+                <option value="Ms.">Ms.</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Full Name:</label>
+            <input type="text" id="inName" placeholder="e.g. John Doe" oninput="update()">
+        </div>
+
+        <div class="form-group">
+            <label>Passport Number:</label>
+            <input type="text" id="inPassport" oninput="update()">
+        </div>
+
+        <div class="form-group">
+            <label>Passport Issue Date:</label>
+            <input type="date" id="inIssueDate" onchange="update()">
+        </div>
+
+        <div class="form-group">
+            <label>Passport Issue Place:</label>
+            <input type="text" id="inIssuePlace" placeholder="e.g. USA" oninput="update()">
+        </div>
+
+        <button onclick="generatePDF()">📥 Download Invitation PDF</button>
+    </div>
+
+    <div id="letter-preview">
+        <div class="letter-content">
+            <div class="header">
+                <div class
